@@ -15,11 +15,25 @@
 				<span v-else>📄</span>
 				{{ node.name }}
 			</div>
-			<button
-				class="bg-red-900 px-4 rounded text-black-700"
-				@click="removeFile">
-				Remove file
-			</button>
+			<div class="flex gap-4">
+				<button
+					v-if="isFolder"
+					class="bg-yellow-900 px-4 rounded text-black-700"
+					@click.stop="addFile">
+					Add file
+				</button>
+				<button
+					v-if="isFolder"
+					class="bg-green-900 px-4 rounded text-black-700"
+					@click.stop="addFolder">
+					Add Folder
+				</button>
+				<button
+					class="bg-red-900 px-4 rounded text-black-700"
+					@click.stop="removeFileOrFolder">
+					Delete
+				</button>
+			</div>
 		</div>
 
 		<div v-if="isFolder && isExpanded">
@@ -29,7 +43,8 @@
 				:node="child"
 				:expandedNodes="expandedNodes"
 				:level="level + 1"
-				@remove-node="emit('remove-node', $event)" />
+				@remove-node="emit('remove-node', $event)"
+				@add-node="emit('add-node', $event)" />
 		</div>
 	</div>
 </template>
@@ -38,7 +53,7 @@
 import { FileNode } from "@/types";
 import { computed } from "vue";
 
-const emit = defineEmits(["toggle-folder", "remove-node"]);
+const emit = defineEmits(["toggle-folder", "remove-node", "add-node"]);
 
 const props = defineProps({
 	node: {
@@ -69,7 +84,17 @@ const onFolderToggle = () => {
 	}
 };
 
-const removeFile = () => {
+const addFile = () => addNode(true);
+const addFolder = () => addNode(false);
+
+const addNode = (isFile: boolean) => {
+	emit("add-node", {
+		isFile,
+		parentId: props.node.id,
+	});
+};
+
+const removeFileOrFolder = () => {
 	emit("remove-node", props.node.id);
 };
 </script>

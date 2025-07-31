@@ -38,10 +38,11 @@ export const filePathsToTree = (filePaths: string[]): FileNode => {
 		}
 
 		const fileName = parts[parts.length - 1];
-		current.children?.push({
+		current.children.push({
 			id: uuidv4(),
 			name: fileName,
 			isFile: true,
+            children: [],
 		});
 	});
 
@@ -51,7 +52,7 @@ export const filePathsToTree = (filePaths: string[]): FileNode => {
 /**
  * Finds a node by its ID in the file tree and returns the node along with its path
  */
-export const findNode = (
+export const findNodeById = (
 	node: FileNode,
 	id: string
 ): [FileNode | null, FileNode[]] => {
@@ -61,7 +62,7 @@ export const findNode = (
 
 	if (!node.isFile && node.children) {
 		for (const child of node.children) {
-			const [found, path] = findNode(child, id);
+			const [found, path] = findNodeById(child, id);
 			if (found) {
 				return [found, [node, ...path]];
 			}
@@ -70,3 +71,4 @@ export const findNode = (
 
 	return [null, []];
 };
+
