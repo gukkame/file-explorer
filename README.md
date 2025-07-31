@@ -12,3 +12,9 @@ Functional requirements
 ● It should allow to add a new file or folder
 ● Bonus points:
 ○ the state is persisted after restarting the application
+
+### Tech stack
+- Vue
+- TypeScript
+- Tailwind CSS
+- Vite
