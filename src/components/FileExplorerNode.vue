@@ -5,22 +5,31 @@
 			paddingLeft: `${level * 20}px`,
 		}">
 		<div
-			class="hover:cursor-pointer hover:bg-gray-700 py-1 rounded"
+			class="flex justify-between hover:cursor-pointer hover:bg-gray-700 py-1 rounded"
 			@click="onFolderToggle"
 			:class="{ folder: isFolder, expanded: isExpanded }">
-			<span v-if="isFolder">
-				{{ isExpanded ? "📂" : "📁" }}
-			</span>
-			<span v-else>📄</span>
-			{{ node.name }}
+			<div>
+				<span v-if="isFolder">
+					{{ isExpanded ? "📂" : "📁" }}
+				</span>
+				<span v-else>📄</span>
+				{{ node.name }}
+			</div>
+			<button
+				class="bg-red-900 px-4 rounded text-black-700"
+				@click="removeFile">
+				Remove file
+			</button>
 		</div>
+
 		<div v-if="isFolder && isExpanded">
 			<FileExplorerNode
 				v-for="child in node.children"
 				:key="child.id"
 				:node="child"
 				:expandedNodes="expandedNodes"
-				:level="level + 1" />
+				:level="level + 1"
+				@remove-node="emit('remove-node', $event)" />
 		</div>
 	</div>
 </template>
@@ -29,7 +38,7 @@
 import { FileNode } from "@/types";
 import { computed } from "vue";
 
-const emit = defineEmits(["toggle-folder"]);
+const emit = defineEmits(["toggle-folder", "remove-node"]);
 
 const props = defineProps({
 	node: {
@@ -58,5 +67,9 @@ const onFolderToggle = () => {
 			props.expandedNodes.push(props.node.id);
 		}
 	}
+};
+
+const removeFile = () => {
+	emit("remove-node", props.node.id);
 };
 </script>
