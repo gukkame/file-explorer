@@ -7,33 +7,25 @@
 			{{ error }}
 		</h2>
 		<div v-if="rootNode" class="flex justify-between m-4">
-			<button
-				class="bg-green-900 px-4 rounded text-black-700 w-40 items-center mb-4 p-2"
-				@click="getApiData(true)">
+			<button class="bg-green-900 px-4 rounded w-40 items-center mb-4 p-2" @click="getApiData(true)">
 				Reset Data
 			</button>
-			<button
-				class="bg-green-900 px-4 rounded text-black-700 w-40 items-center mb-4 p-2"
+			<button class="bg-green-900 px-4 rounded w-40 items-center mb-4 p-2"
 				@click="addNode({ isFile: false, parentId: rootNode.id })">
 				Add Folder
 			</button>
-			<button
-				class="bg-green-900 px-4 rounded text-black-700 w-40 items-center mb-4 p-2"
+			<button class="bg-green-900 px-4 rounded w-40 items-center mb-4 p-2"
 				@click="addNode({ isFile: true, parentId: rootNode.id })">
 				Add File
 			</button>
 		</div>
 
 		<div v-if="rootNode?.children.length">
-			<FileExplorerNode
-				v-for="child in rootNode.children"
-				:key="child.id"
-				:node="child"
-				:expandedNodes="expandedNodes"
-				@remove-node="removeNode($event)"
-				@add-node="addNode($event)" />
+			<FileExplorerNode v-for="child in rootNode.children" :key="child.id" :node="child"
+				:expandedNodes="expandedNodes" @remove-node="removeNode($event)" @add-node="addNode($event)" />
 		</div>
 		<div v-else class="text-center text-xl">No data available</div>
+		<p class="mt-20 text-right text-neutral-500">Made by Gunta Kļava</p>
 	</div>
 </template>
 
