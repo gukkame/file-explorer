@@ -2,19 +2,17 @@ import { filePathsToTree } from "../helper/fileNodeHelper";
 import { FileNode } from "@/types";
 import axios from "axios";
 
-
 interface ApiResponse {
 	name: string;
 	filepaths: string[];
 }
 
-
 export const fetchData = async (shouldResetData = false): Promise<FileNode> => {
-	const hasSavedData = setSavedDataFromLocalStorage();
+	const savedData = getSavedDataFromLocalStorage();
 
-	if (hasSavedData && !shouldResetData) {
+	if (savedData && !shouldResetData) {
         console.log("Using saved data from localStorage");
-		return hasSavedData;
+		return savedData;
 	}
 
 	try {
@@ -33,7 +31,7 @@ export const fetchData = async (shouldResetData = false): Promise<FileNode> => {
 	}
 };
 
-const setSavedDataFromLocalStorage = (): FileNode | null => {
+const getSavedDataFromLocalStorage = (): FileNode | null => {
 	const savedData = localStorage.getItem("fileExplorerData");
 	if (savedData) {
 		return JSON.parse(savedData);

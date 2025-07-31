@@ -24,7 +24,7 @@
 			</button>
 		</div>
 
-		<div v-if="rootNode">
+		<div v-if="rootNode?.children.length">
 			<FileExplorerNode
 				v-for="child in rootNode.children"
 				:key="child.id"
@@ -33,6 +33,7 @@
 				@remove-node="removeNode($event)"
 				@add-node="addNode($event)" />
 		</div>
+		<div v-else class="text-center text-xl">No data available</div>
 	</div>
 </template>
 
