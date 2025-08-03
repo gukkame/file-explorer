@@ -14,31 +14,32 @@ export const filePathsToTree = (filePaths: string[]): FileNode => {
     };
 
     filePaths.forEach((path) => {
-        const parts = path.split("/");
-        let current = root;
+        const pathSegments = path.split("/");
+        let currentLocation  = root;
 
         // Create intermediate folders
-        for (let i = 0; i < parts.length - 1; i++) {
-            const part = parts[i];
-            let existing = (current.children ?? []).find(
-                (child: { isFile: boolean; name: string }) =>
-                    child.isFile === false && child.name === part
+        for (let i = 0; i < pathSegments.length - 1; i++) {
+            const folderName = pathSegments[i];
+
+            let targetFolder = (currentLocation.children).find(
+                (childNode: { isFile: boolean; name: string }) =>
+                    !childNode.isFile && childNode.name === folderName
             );
 
-            if (!existing) {
-                existing = {
+            if (!targetFolder) {
+                targetFolder = {
                     id: uuidv4(),
-                    name: part,
+                    name: folderName,
                     isFile: false,
                     children: [],
                 };
-                current.children?.push(existing);
+                currentLocation.children.push(targetFolder);
             }
-            current = existing;
+            currentLocation = targetFolder;
         }
 
-        const fileName = parts[parts.length - 1];
-        current.children.push({
+        const fileName = pathSegments[pathSegments.length - 1];
+        currentLocation.children.push({
             id: uuidv4(),
             name: fileName,
             isFile: true,
